@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma Valentine 💖</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg,#f9f9f9,#fce4ec);
+    font-family:'Segoe UI',sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Lumière douce */
+body::before {
+    content:"";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(244,143,177,0.25), transparent 70%);
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+/* Cœurs flottants */
+.heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    transform: rotate(-45deg);
+    animation: floatHeart linear forwards;
+    z-index: 1;
+}
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+}
+.heart::before { top: -10px; left: 0; }
+.heart::after { top: 0; left: 10px; }
+
+@keyframes floatHeart {
+    0% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(-10vh) rotate(-45deg); opacity: 0; }
+}
+
+/* Responsive */
+@media (max-width:480px){
+    .heart { width: 14px; height: 14px; }
+    .heart::before, .heart::after { width: 14px; height: 14px; }
+}
+
+
+/* Carte centrée */
+.card-love {
+    width: 90%;
+    max-width: 350px;
+    padding: 20px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    border: 1px solid rgb(240, 92, 92);
+}
+
+/* Textes */
+h5 { color: #c2185b; font-weight: 600; font-size: 16px; }
+p { margin-bottom: 15px; font-size: 14px; }
+
+/* Boutons */
+.btn-yes, .btn-no { border-radius: 25px; padding: 8px 20px; font-size: 14px; }
+.btn-yes { background: #c2185b; color: white; border: none; }
+.btn-no { background: white; border: 1px solid #c2185b; transition:0.2s; cursor:pointer;}
+
+/* Final message */
+#finalMessage {
+    display: none;
+    margin-top: 15px;
+    color: #c2185b;
+    font-weight: 500;
+    font-size: 14px;
+    animation: fadeIn 0.8s ease;
+}
+@keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
+
+/* Confettis derrière la carte */
+.confetti {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    top: -10px; /* démarre au-dessus de l'écran */
+    animation: fall linear forwards;
+    z-index: 1; /* derrière la carte */
+}
+@keyframes fall { to { transform: translateY(120vh); opacity: 0; } }
+
+.share-btn { margin-top: 15px; }
+.signature { margin-top: 15px; font-size: 12px; color:#999; }
+
+.heart {
+    position: absolute;
+    font-size: 20px;   /* taille du cœur */
+    animation: floatHeart linear forwards;
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes floatHeart {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+
+/* Responsive mobile */
+@media (max-width:480px){
+    body::before { width: 120px; height: 120px; }
+    .card-love { padding: 15px; max-width: 95%; }
+    h5 { font-size: 14px; }
+    p, #finalMessage { font-size: 13px; }
+    .btn-yes, .btn-no { padding: 6px 15px; font-size: 13px; }
+    .signature { font-size: 10px; }
+    .confetti { width: 4px; height: 4px; }
+    .heart { font-size: 14px; }
+}
+
+
+
+
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" src="music_love.mpeg"></audio>
+
+<div class="card-love">
+    <h5>💌 Mon cœur...</h5>
+    <p>J’ai une question importante 🥰</p>
+    <h5 style="margin-bottom: 20px;">Est-ce que tu veux être ma Valentine ?</h5>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+        <button class="btn btn-yes" onclick="acceptLove()">OUI 💖</button>
+        <button class="btn btn-no" id="noBtn">NON 😢</button>
+    </div>
+
+    <div id="finalMessage">
+        💕 OUIII 😍<br>
+        Rendez-vous le 14 février✨<br>
+        Une soirée spéciale t’attend 💌
+        <div>
+            <button class="btn btn-outline-danger share-btn" onclick="shareLove()">Partager 💌</button>
+            <div style="font-size:12px; margin-top:10px; color:#888;">
+                Musique Extrait: "LAISSE MOI T'AIMER" - ZEYNAB FT AXEL MERRYL
+                Source : <a href="https://youtu.be/PTbrF6ngwo0?si=XmPyIU7F6L4fbJa0">youtube</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="signature">
+        <a href="https://www.facebook.com/matinou.idrisou" style="text-decoration:none;">By Matinou 💎</a>
+    </div>
+</div>
+<div id="hearts-container" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:0;"></div>
+
+<script>
+    // Fonction pour flotter les coeurs
+function launchHearts(){
+    const container = document.getElementById('hearts-container');
+    setInterval(()=>{
+        const h = document.createElement('div');
+        h.classList.add('heart');
+        h.textContent = "💖"; // ← cœur emoji
+
+        h.style.left = Math.random() * (container.clientWidth - 20) + 'px';
+        h.style.animationDuration = (Math.random()*3 + 3)+'s';
+
+        container.appendChild(h);
+        setTimeout(()=>h.remove(), 6000);
+    }, 400);
+}
+
+// Lancer les cœurs
+launchHearts();
+
+
+const noBtn = document.getElementById("noBtn");
+
+/* Bouton NON bouge sur tout l'écran */
+function moveButtonFullScreen(){
+    // passer en position fixed à la première interaction
+    if(noBtn.style.position !== "fixed"){
+        const rect = noBtn.getBoundingClientRect();
+        noBtn.style.position = "fixed";
+        noBtn.style.left = rect.left + "px";
+        noBtn.style.top = rect.top + "px";
+    }
+
+    const btnRect = noBtn.getBoundingClientRect();
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight;
+
+    const maxX = screenW - btnRect.width;
+    const maxY = screenH - btnRect.height;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+/* Réactivité souris et tactile */
+noBtn.addEventListener("mouseenter", moveButtonFullScreen);
+noBtn.addEventListener("touchstart", moveButtonFullScreen);
+
+/* Quand OUI cliqué */
+function acceptLove(){
+    document.getElementById("finalMessage").style.display="block";
+    document.getElementById("bgMusic").play();
+
+    // Confettis du haut
+    launchConfetti();
+
+    // Faire disparaître le bouton NON
+    noBtn.style.display = "none";
+}
+
+/* Confettis qui tombent du haut de l'écran derrière la carte */
+function launchConfetti(){
+    for(let i=0;i<60;i++){
+        const c = document.createElement('div');
+        c.classList.add('confetti');
+        c.style.left = Math.random() * window.innerWidth + 'px';
+        c.style.backgroundColor = randomColor();
+        c.style.animationDuration = (Math.random()*2 + 2)+'s';
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(), 4000);
+    }
+}
+
+function randomColor(){
+    const colors=["#f8bbd0","#f06292","#ec407a","#f48fb1"];
+    return colors[Math.floor(Math.random()*colors.length)];
+}
+
+/* Partage réseaux */
+function shareLove(){
+    const shareData = {
+        title:"Ma Valentine 💖",
+        text:"J’ai dit OUI 😍💘",
+        url: window.location.href
+    };
+    if(navigator.share){
+        navigator.share(shareData);
+    }else{
+        window.open("https://wa.me/?text="+encodeURIComponent(shareData.text+" "+shareData.url));
+    }
+}
+</script>
+
+</body>
+</html>
